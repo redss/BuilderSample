@@ -8,6 +8,14 @@ namespace BuilderSample
         void AssignTaxiToOrder(int taxiId, int orderId);
     }
 
+    public class TaxiHasOngoingOrderAlready : Exception
+    {
+    }
+
+    public class OrderAlreadyTakenException : Exception
+    {
+    }
+
     public class TaxiCompanyService : ITaxiCompanyService
     {
         private readonly TaxiCompanyContext _taxiCompanyContext;
@@ -21,11 +29,16 @@ namespace BuilderSample
         {
             if (_taxiCompanyContext.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Taken))
             {
-                throw new InvalidOperationException("Taxi is already assigned to an order!");
+                throw new TaxiHasOngoingOrderAlready();
             }
 
             var taxi = _taxiCompanyContext.Taxis.Single(t => t.Id == taxiId);
             var order = _taxiCompanyContext.Orders.Single(t => t.Id == orderId);
+
+            if (order.Status == OrderStatus.Taken)
+            {
+                throw new OrderAlreadyTakenException();
+            }
 
             order.Status = OrderStatus.Taken;
             order.AssignedTaxi = taxi;

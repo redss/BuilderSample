@@ -115,7 +115,63 @@ namespace BuilderSample
             // act, assert
 
             Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
-                Throws.InvalidOperationException);
+                Throws.TypeOf<TaxiHasOngoingOrderAlready>());
+        }
+
+        [Test]
+        public void Fails_When_Order_Is_Already_Taken()
+        {
+            // arrange
+
+            var taxi = new Taxi
+            {
+                LicensePlate = "S1TAXI1",
+
+                Owner = new Driver
+                {
+                    FirstName = "Jan",
+                    Surname = "Kowalski"
+                },
+
+                Fleet = new Fleet
+                {
+                    Name = "Taxi Corpo SP ZOO"
+                }
+            };
+
+            TaxiCompanyContext.Taxis.Add(taxi);
+
+            var order = new Order
+            {
+                Address = "Gliwice Akademicka 100",
+                RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
+                Status = OrderStatus.Taken,
+                
+                AssignedTaxi = new Taxi
+                {
+                    LicensePlate = "S1TAXI2",
+
+                    Owner = new Driver
+                    {
+                        FirstName = "Mateusz",
+                        Surname = "Nowak"
+                    },
+
+                    Fleet = new Fleet
+                    {
+                        Name = "Taxi Korpo SP ZOO"
+                    }
+                }
+            };
+
+            TaxiCompanyContext.Orders.Add(order);
+
+            TaxiCompanyContext.SaveChanges();
+
+            // act, assert
+
+            Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+                Throws.TypeOf<OrderAlreadyTakenException>());
         }
 
         [TearDown]
