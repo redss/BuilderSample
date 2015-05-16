@@ -1,4 +1,5 @@
-﻿using BuilderSample.Builders;
+﻿using System;
+using BuilderSample.Builders;
 using BuilderSample.Model;
 using NUnit.Framework;
 
@@ -7,19 +8,53 @@ namespace BuilderSample.Tests
     [TestFixture]
     public class TaxiCompanyTestsWithBuilders
     {
-        public TaxiCompanyContext TaxiCompanyContext;
+        public class TaxiCompanyFixture : IDisposable
+        {
+            private TaxiCompanyContext _serviceContext;
 
-        public TaxiCompanyService TaxiCompanyService;
+            public TaxiCompanyContext Context;
 
-        [SetUp] 
+            public TaxiCompanyService TaxiCompanyService;
+
+            public TaxiCompanyFixture()
+            {
+                Context = new TaxiCompanyContext();
+
+                Context.Database.Delete();
+                Context.Database.Create();
+
+                _serviceContext = new TaxiCompanyContext();
+
+                TaxiCompanyService = new TaxiCompanyService(_serviceContext);
+            }
+
+            public void ResetContext()
+            {
+                Context.Dispose();
+
+                Context = new TaxiCompanyContext();
+            }
+
+            public void Dispose()
+            {
+                Context.Dispose();
+
+                _serviceContext.Dispose();
+            }
+        }
+
+        public TaxiCompanyFixture Fixture;
+
+        [SetUp]
         public void SetUp()
         {
-            TaxiCompanyContext = new TaxiCompanyContext();
+            Fixture = new TaxiCompanyFixture();
+        }
 
-            TaxiCompanyContext.Database.Delete();
-            TaxiCompanyContext.Database.Create();
-
-            TaxiCompanyService = new TaxiCompanyService(new TaxiCompanyContext());
+        [TearDown]
+        public void TearDown()
+        {
+            Fixture.Dispose();
         }
 
         [Test]
@@ -27,22 +62,22 @@ namespace BuilderSample.Tests
         {
             // arrange
 
-            var taxi = new TaxiBuilder(TaxiCompanyContext)
+            var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
 
-            var order = new OrderBuilder(TaxiCompanyContext)
+            var order = new OrderBuilder(Fixture.Context)
                 .WithStatus(OrderStatus.Open)
                 .BuildAndSave();
 
             // act
 
-            TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
+            Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
 
-            ResetContext();
+            Fixture.ResetContext();
 
             // assert
 
-            var chengedOrder = TaxiCompanyContext.Orders.Find(order.Id);
+            var chengedOrder = Fixture.Context.Orders.Find(order.Id);
 
             Assert.That(chengedOrder.Status, Is.EqualTo(OrderStatus.Taken));
             Assert.That(chengedOrder.AssignedTaxi, Is.Not.Null);
@@ -54,21 +89,21 @@ namespace BuilderSample.Tests
         {
             // arrange
 
-            var taxi = new TaxiBuilder(TaxiCompanyContext)
+            var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
 
-            var alreadyTakenOrder = new OrderBuilder(TaxiCompanyContext)
+            var alreadyTakenOrder = new OrderBuilder(Fixture.Context)
                 .WithAssignedTaxi(taxi)
                 .WithStatus(OrderStatus.Taken)
                 .BuildAndSave();
 
-            var order = new OrderBuilder(TaxiCompanyContext)
+            var order = new OrderBuilder(Fixture.Context)
                 .WithStatus(OrderStatus.Open)
                 .BuildAndSave();
 
             // act, assert
 
-            Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
         }
 
@@ -77,31 +112,18 @@ namespace BuilderSample.Tests
         {
             // arrange
 
-            var taxi = new TaxiBuilder(TaxiCompanyContext)
+            var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
 
-            var order = new OrderBuilder(TaxiCompanyContext)
+            var order = new OrderBuilder(Fixture.Context)
                 .WithSomeAssignedTaxi()
                 .WithStatus(OrderStatus.Taken)
                 .BuildAndSave();
 
             // act, assert
 
-            Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyTakenException>());
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            TaxiCompanyContext.Dispose();
-        }
-
-        private void ResetContext()
-        {
-            TaxiCompanyContext.Dispose();
-
-            TaxiCompanyContext = new TaxiCompanyContext();
         }
     }
 }

@@ -7,19 +7,53 @@ namespace BuilderSample.Tests
     [TestFixture]
     public class TaxiCompanyTests
     {
-        public TaxiCompanyContext TaxiCompanyContext;
+        public class TaxiCompanyFixture : IDisposable
+        {
+            private TaxiCompanyContext _serviceContext;
 
-        public TaxiCompanyService TaxiCompanyService;
+            public TaxiCompanyContext Context;
+
+            public TaxiCompanyService TaxiCompanyService;
+
+            public TaxiCompanyFixture()
+            {
+                Context = new TaxiCompanyContext();
+
+                Context.Database.Delete();
+                Context.Database.Create();
+
+                _serviceContext = new TaxiCompanyContext();
+
+                TaxiCompanyService = new TaxiCompanyService(_serviceContext);
+            }
+
+            public void ResetContext()
+            {
+                Context.Dispose();
+
+                Context = new TaxiCompanyContext();
+            }
+
+            public void Dispose()
+            {
+                Context.Dispose();
+
+                _serviceContext.Dispose();
+            }
+        }
+
+        public TaxiCompanyFixture Fixture;
 
         [SetUp] 
         public void SetUp()
         {
-            TaxiCompanyContext = new TaxiCompanyContext();
+            Fixture = new TaxiCompanyFixture();
+        }
 
-            TaxiCompanyContext.Database.Delete();
-            TaxiCompanyContext.Database.Create();
-
-            TaxiCompanyService = new TaxiCompanyService(new TaxiCompanyContext());
+        [TearDown]
+        public void TearDown()
+        {
+            Fixture.Dispose();
         }
 
         [Test]
@@ -43,7 +77,7 @@ namespace BuilderSample.Tests
                 }
             };
 
-            TaxiCompanyContext.Taxis.Add(taxi);
+            Fixture.Context.Taxis.Add(taxi);
 
             var order = new Order
             {
@@ -52,19 +86,19 @@ namespace BuilderSample.Tests
                 Status = OrderStatus.Open
             };
 
-            TaxiCompanyContext.Orders.Add(order);
+            Fixture.Context.Orders.Add(order);
 
-            TaxiCompanyContext.SaveChanges();
+            Fixture.Context.SaveChanges();
 
             // act
 
-            TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
+            Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
 
-            ResetContext();
+            Fixture.ResetContext();
 
             // assert
 
-            var chengedOrder = TaxiCompanyContext.Orders.Find(order.Id);
+            var chengedOrder = Fixture.Context.Orders.Find(order.Id);
 
             Assert.That(chengedOrder.Status, Is.EqualTo(OrderStatus.Taken));
             Assert.That(chengedOrder.AssignedTaxi, Is.Not.Null);
@@ -92,7 +126,7 @@ namespace BuilderSample.Tests
                 }
             };
 
-            TaxiCompanyContext.Taxis.Add(taxi);
+            Fixture.Context.Taxis.Add(taxi);
 
             var alreadyTakenOrder = new Order
             {
@@ -102,7 +136,7 @@ namespace BuilderSample.Tests
                 AssignedTaxi = taxi
             };
 
-            TaxiCompanyContext.Orders.Add(alreadyTakenOrder);
+            Fixture.Context.Orders.Add(alreadyTakenOrder);
 
             var order = new Order
             {
@@ -111,11 +145,11 @@ namespace BuilderSample.Tests
                 Status = OrderStatus.Open
             };
 
-            TaxiCompanyContext.SaveChanges();
+            Fixture.Context.SaveChanges();
 
             // act, assert
 
-            Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
         }
 
@@ -140,7 +174,7 @@ namespace BuilderSample.Tests
                 }
             };
 
-            TaxiCompanyContext.Taxis.Add(taxi);
+            Fixture.Context.Taxis.Add(taxi);
 
             var order = new Order
             {
@@ -165,27 +199,14 @@ namespace BuilderSample.Tests
                 }
             };
 
-            TaxiCompanyContext.Orders.Add(order);
+            Fixture.Context.Orders.Add(order);
 
-            TaxiCompanyContext.SaveChanges();
+            Fixture.Context.SaveChanges();
 
             // act, assert
 
-            Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyTakenException>());
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            TaxiCompanyContext.Dispose();
-        }
-
-        private void ResetContext()
-        {
-            TaxiCompanyContext.Dispose();
-
-            TaxiCompanyContext = new TaxiCompanyContext();
         }
     }
 }
