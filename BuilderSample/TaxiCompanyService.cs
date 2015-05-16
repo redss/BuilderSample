@@ -19,32 +19,31 @@ namespace BuilderSample
 
     public class TaxiCompanyService : ITaxiCompanyService
     {
-        private readonly TaxiCompanyContext _taxiCompanyContext;
-
-        public TaxiCompanyService(TaxiCompanyContext taxiCompanyContext)
-        {
-            _taxiCompanyContext = taxiCompanyContext;
-        }
-
         public void AssignTaxiToOrder(int taxiId, int orderId)
         {
-            if (_taxiCompanyContext.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Taken))
+            using (var context = new TaxiCompanyContext())
+            using (var transaction = context.Database.BeginTransaction())
             {
-                throw new TaxiHasOngoingOrderAlreadyException();
+                if (context.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Taken))
+                {
+                    throw new TaxiHasOngoingOrderAlreadyException();
+                }
+
+                var taxi = context.Taxis.Single(t => t.Id == taxiId);
+                var order = context.Orders.Single(t => t.Id == orderId);
+
+                if (order.Status == OrderStatus.Taken)
+                {
+                    throw new OrderAlreadyTakenException();
+                }
+
+                order.Status = OrderStatus.Taken;
+                order.AssignedTaxi = taxi;
+
+                context.SaveChanges();
+
+                transaction.Commit();
             }
-
-            var taxi = _taxiCompanyContext.Taxis.Single(t => t.Id == taxiId);
-            var order = _taxiCompanyContext.Orders.Single(t => t.Id == orderId);
-
-            if (order.Status == OrderStatus.Taken)
-            {
-                throw new OrderAlreadyTakenException();
-            }
-
-            order.Status = OrderStatus.Taken;
-            order.AssignedTaxi = taxi;
-
-            _taxiCompanyContext.SaveChanges();
         }
     }
 }

@@ -9,8 +9,6 @@ namespace BuilderSample.Tests
     {
         public class TaxiCompanyFixture : IDisposable
         {
-            private TaxiCompanyContext _serviceContext;
-
             public TaxiCompanyContext Context;
 
             public TaxiCompanyService TaxiCompanyService;
@@ -22,9 +20,7 @@ namespace BuilderSample.Tests
                 Context.Database.Delete();
                 Context.Database.Create();
 
-                _serviceContext = new TaxiCompanyContext();
-
-                TaxiCompanyService = new TaxiCompanyService(_serviceContext);
+                TaxiCompanyService = new TaxiCompanyService();
             }
 
             public void ResetContext()
@@ -37,8 +33,6 @@ namespace BuilderSample.Tests
             public void Dispose()
             {
                 Context.Dispose();
-
-                _serviceContext.Dispose();
             }
         }
 
