@@ -1,4 +1,6 @@
-﻿namespace BuilderSample
+﻿using BuilderSample.Model;
+
+namespace BuilderSample.Builders
 {
     public class DriverBuilder
     {

@@ -1,6 +1,7 @@
 ﻿using System;
+using BuilderSample.Model;
 
-namespace BuilderSample
+namespace BuilderSample.Builders
 {
     public class OrderBuilder
     {

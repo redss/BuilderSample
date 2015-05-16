@@ -51,16 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FleetBuilder.cs" />
-    <Compile Include="OrderBuilder.cs" />
-    <Compile Include="DriverBuilder.cs" />
-    <Compile Include="TaxiBuilder.cs" />
+    <Compile Include="Builders\FleetBuilder.cs" />
+    <Compile Include="Builders\OrderBuilder.cs" />
+    <Compile Include="Builders\DriverBuilder.cs" />
+    <Compile Include="Builders\TaxiBuilder.cs" />
+    <Compile Include="Model\Fleet.cs" />
+    <Compile Include="Model\Order.cs" />
+    <Compile Include="Model\Taxi.cs" />
     <Compile Include="TaxiCompanyService.cs" />
-    <Compile Include="Model.cs" />
+    <Compile Include="Model\Driver.cs" />
     <Compile Include="TaxiCompanyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaxiCompanyTestsWithBuilders.cs" />
-    <Compile Include="TaxiCompanyTests.cs" />
+    <Compile Include="Tests\TaxiCompanyTestsWithBuilders.cs" />
+    <Compile Include="Tests\TaxiCompanyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

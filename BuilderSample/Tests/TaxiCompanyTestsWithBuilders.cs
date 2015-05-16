@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using BuilderSample.Builders;
+using BuilderSample.Model;
+using NUnit.Framework;
 
-namespace BuilderSample
+namespace BuilderSample.Tests
 {
     [TestFixture]
     public class TaxiCompanyTestsWithBuilders
@@ -67,7 +69,7 @@ namespace BuilderSample
             // act, assert
 
             Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
-                Throws.TypeOf<TaxiHasOngoingOrderAlready>());
+                Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
         }
 
         [Test]

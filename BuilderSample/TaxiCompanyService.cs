@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BuilderSample.Model;
 
 namespace BuilderSample
 {
@@ -8,7 +9,7 @@ namespace BuilderSample
         void AssignTaxiToOrder(int taxiId, int orderId);
     }
 
-    public class TaxiHasOngoingOrderAlready : Exception
+    public class TaxiHasOngoingOrderAlreadyException : Exception
     {
     }
 
@@ -29,7 +30,7 @@ namespace BuilderSample
         {
             if (_taxiCompanyContext.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Taken))
             {
-                throw new TaxiHasOngoingOrderAlready();
+                throw new TaxiHasOngoingOrderAlreadyException();
             }
 
             var taxi = _taxiCompanyContext.Taxis.Single(t => t.Id == taxiId);

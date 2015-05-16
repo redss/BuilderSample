@@ -1,7 +1,8 @@
 ﻿using System;
+using BuilderSample.Model;
 using NUnit.Framework;
 
-namespace BuilderSample
+namespace BuilderSample.Tests
 {
     [TestFixture]
     public class TaxiCompanyTests
@@ -115,7 +116,7 @@ namespace BuilderSample
             // act, assert
 
             Assert.That(() => TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
-                Throws.TypeOf<TaxiHasOngoingOrderAlready>());
+                Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
         }
 
         [Test]
