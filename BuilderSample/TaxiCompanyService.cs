@@ -4,17 +4,21 @@ using BuilderSample.Model;
 
 namespace BuilderSample
 {
-    public interface ITaxiCompanyService
-    {
-        void AssignTaxiToOrder(int taxiId, int orderId);
-    }
-
     public class TaxiHasOngoingOrderAlreadyException : Exception
     {
     }
 
     public class OrderAlreadyTakenException : Exception
     {
+    }
+
+    public class OrderAlreadyCompletedException : Exception
+    {
+    }
+
+    public interface ITaxiCompanyService
+    {
+        void AssignTaxiToOrder(int taxiId, int orderId);
     }
 
     public class TaxiCompanyService : ITaxiCompanyService
@@ -35,6 +39,10 @@ namespace BuilderSample
                 if (order.Status == OrderStatus.Taken)
                 {
                     throw new OrderAlreadyTakenException();
+                }
+                if (order.Status == OrderStatus.Complete)
+                {
+                    throw new OrderAlreadyCompletedException();
                 }
 
                 order.Status = OrderStatus.Taken;

@@ -9,7 +9,8 @@ namespace BuilderSample.Builders
         private readonly Driver _driver = new Driver
         {
             FirstName = "Jan",
-            Surname = "Kowalski"
+            Surname = "Kowalski",
+            //Email = "driver@qa.com"
         };
 
         public DriverBuilder(TaxiCompanyContext context)
@@ -24,7 +25,7 @@ namespace BuilderSample.Builders
 
         public Driver BuildAndSave()
         {
-            _context.Persons.Add(_driver);
+            _context.Drivers.Add(_driver);
 
             _context.SaveChanges();
 

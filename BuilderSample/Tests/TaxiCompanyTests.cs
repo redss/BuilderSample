@@ -62,7 +62,7 @@ namespace BuilderSample.Tests
                 Owner = new Driver
                 {
                     FirstName = "Jan",
-                    Surname = "Kowalski"
+                    Surname = "Nowak"
                 },
 
                 Fleet = new Fleet
@@ -148,7 +148,7 @@ namespace BuilderSample.Tests
         }
 
         [Test]
-        public void Fails_When_Order_Is_Already_Taken()
+        public void Assign_Taxi_Fails_When_Order_Is_Already_Taken()
         {
             // arrange
 
@@ -201,6 +201,62 @@ namespace BuilderSample.Tests
 
             Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyTakenException>());
+        }
+
+        [Test]
+        public void Assign_Taxi_Fails_When_Order_Is_Completed()
+        {
+            // arrange
+
+            var taxi = new Taxi
+            {
+                LicensePlate = "S1TAXI1",
+
+                Owner = new Driver
+                {
+                    FirstName = "Jan",
+                    Surname = "Kowalski"
+                },
+
+                Fleet = new Fleet
+                {
+                    Name = "Taxi Corpo SP ZOO"
+                }
+            };
+
+            Fixture.Context.Taxis.Add(taxi);
+
+            var order = new Order
+            {
+                Address = "Gliwice Akademicka 100",
+                RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
+                Status = OrderStatus.Complete,
+
+                AssignedTaxi = new Taxi
+                {
+                    LicensePlate = "S1TAXI2",
+
+                    Owner = new Driver
+                    {
+                        FirstName = "Mateusz",
+                        Surname = "Nowak"
+                    },
+
+                    Fleet = new Fleet
+                    {
+                        Name = "Taxi Korpo SP ZOO"
+                    }
+                }
+            };
+
+            Fixture.Context.Orders.Add(order);
+
+            Fixture.Context.SaveChanges();
+
+            // act, assert
+
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+                Throws.TypeOf<OrderAlreadyCompletedException>());
         }
     }
 }

@@ -102,7 +102,7 @@ namespace BuilderSample.Tests
         }
 
         [Test]
-        public void Fails_When_Order_Is_Already_Taken()
+        public void Assign_Taxi_Fails_When_Order_Is_Already_Taken()
         {
             // arrange
 
@@ -118,6 +118,25 @@ namespace BuilderSample.Tests
 
             Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyTakenException>());
+        }
+
+        [Test]
+        public void Assign_Taxi_Fails_When_Order_Is_Completed()
+        {
+            // arrange
+
+            var taxi = new TaxiBuilder(Fixture.Context)
+                .BuildAndSave();
+
+            var order = new OrderBuilder(Fixture.Context)
+                .WithSomeAssignedTaxi()
+                .WithStatus(OrderStatus.Complete)
+                .BuildAndSave();
+
+            // act, assert
+
+            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+                Throws.TypeOf<OrderAlreadyCompletedException>());
         }
     }
 }

@@ -22,10 +22,6 @@ namespace BuilderSample.Builders
 
         public Taxi Build()
         {
-            _context.Taxis.Add(_taxi);
-
-            _context.SaveChanges();
-
             return _taxi;
         }
 
