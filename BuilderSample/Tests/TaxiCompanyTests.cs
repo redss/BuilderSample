@@ -9,18 +9,13 @@ namespace BuilderSample.Tests
     {
         public class TaxiCompanyFixture : IDisposable
         {
-            public TaxiCompanyContext Context;
-
-            public TaxiCompanyService TaxiCompanyService;
+            public TaxiCompanyContext Context = new TaxiCompanyContext();
+            public TaxiCompanyService TaxiCompanyService = new TaxiCompanyService();
 
             public TaxiCompanyFixture()
             {
-                Context = new TaxiCompanyContext();
-
                 Context.Database.Delete();
                 Context.Database.Create();
-
-                TaxiCompanyService = new TaxiCompanyService();
             }
 
             public void ResetContext()
@@ -38,7 +33,7 @@ namespace BuilderSample.Tests
 
         public TaxiCompanyFixture Fixture;
 
-        [SetUp] 
+        [SetUp]
         public void SetUp()
         {
             Fixture = new TaxiCompanyFixture();
@@ -65,7 +60,7 @@ namespace BuilderSample.Tests
                     Surname = "Nowak"
                 },
 
-                Fleet = new Fleet
+                Corporation = new Corporation
                 {
                     Name = "Taxi Corpo SP ZOO"
                 }
@@ -114,7 +109,7 @@ namespace BuilderSample.Tests
                     Surname = "Kowalski"
                 },
 
-                Fleet = new Fleet
+                Corporation = new Corporation
                 {
                     Name = "Taxi Corpo SP ZOO"
                 }
@@ -162,7 +157,7 @@ namespace BuilderSample.Tests
                     Surname = "Kowalski"
                 },
 
-                Fleet = new Fleet
+                Corporation = new Corporation
                 {
                     Name = "Taxi Corpo SP ZOO"
                 }
@@ -186,7 +181,7 @@ namespace BuilderSample.Tests
                         Surname = "Nowak"
                     },
 
-                    Fleet = new Fleet
+                    Corporation = new Corporation
                     {
                         Name = "Taxi Korpo SP ZOO"
                     }
@@ -218,7 +213,7 @@ namespace BuilderSample.Tests
                     Surname = "Kowalski"
                 },
 
-                Fleet = new Fleet
+                Corporation = new Corporation
                 {
                     Name = "Taxi Corpo SP ZOO"
                 }
@@ -242,7 +237,7 @@ namespace BuilderSample.Tests
                         Surname = "Nowak"
                     },
 
-                    Fleet = new Fleet
+                    Corporation = new Corporation
                     {
                         Name = "Taxi Korpo SP ZOO"
                     }

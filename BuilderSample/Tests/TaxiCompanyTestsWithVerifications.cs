@@ -10,18 +10,13 @@ namespace BuilderSample.Tests
     {
         public class TaxiCompanyFixture : IDisposable
         {
-            public TaxiCompanyContext Context;
-
-            public TaxiCompanyService TaxiCompanyService;
+            public TaxiCompanyContext Context = new TaxiCompanyContext();
+            public TaxiCompanyService TaxiCompanyService = new TaxiCompanyService();
 
             public TaxiCompanyFixture()
             {
-                Context = new TaxiCompanyContext();
-
                 Context.Database.Delete();
                 Context.Database.Create();
-
-                TaxiCompanyService = new TaxiCompanyService();
             }
 
             public void ResetContext()

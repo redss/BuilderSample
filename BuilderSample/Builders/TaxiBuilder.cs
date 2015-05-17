@@ -16,7 +16,7 @@ namespace BuilderSample.Builders
             {
                 LicensePlate = "S1TAXI",
                 Owner = new DriverBuilder(_context).Build(),
-                Fleet = new FleetBuilder(_context).Build()
+                Corporation = new CorporationBuilder(_context).Build()
             };
         }
 

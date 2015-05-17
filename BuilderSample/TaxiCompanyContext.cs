@@ -7,7 +7,7 @@ namespace BuilderSample
     {
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Taxi> Taxis { get; set; }
-        public DbSet<Fleet> Fleets { get; set; }
+        public DbSet<Corporation> Corporations { get; set; }
         public DbSet<Order> Orders { get; set; }
     }
 }

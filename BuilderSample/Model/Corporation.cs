@@ -1,6 +1,6 @@
 namespace BuilderSample.Model
 {
-    public class Fleet
+    public class Corporation
     {
         public virtual int Id { get; set; }
 

@@ -51,11 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\FleetBuilder.cs" />
+    <Compile Include="Builders\CorporationBuilder.cs" />
     <Compile Include="Builders\OrderBuilder.cs" />
     <Compile Include="Builders\DriverBuilder.cs" />
     <Compile Include="Builders\TaxiBuilder.cs" />
-    <Compile Include="Model\Fleet.cs" />
+    <Compile Include="Model\Corporation.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Taxi.cs" />
     <Compile Include="TaxiCompanyService.cs" />
