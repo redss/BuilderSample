@@ -28,11 +28,11 @@ namespace BuilderSample.Tests
 
             public void VerifyOrderWasTakenBy(int orderId, int taxiId)
             {
-                var chengedOrder = Context.Orders.Find(orderId);
+                var changedOrder = Context.Orders.Find(orderId);
 
-                Assert.That(chengedOrder.Status, Is.EqualTo(OrderStatus.Taken));
-                Assert.That(chengedOrder.AssignedTaxi, Is.Not.Null);
-                Assert.That(chengedOrder.AssignedTaxi.Id, Is.EqualTo(taxiId));
+                Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Taken));
+                Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
+                Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxiId));
             }
 
             public void Dispose()

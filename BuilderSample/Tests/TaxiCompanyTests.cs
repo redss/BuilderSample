@@ -87,11 +87,11 @@ namespace BuilderSample.Tests
 
             // assert
 
-            var chengedOrder = Fixture.Context.Orders.Find(order.Id);
+            var changedOrder = Fixture.Context.Orders.Find(order.Id);
 
-            Assert.That(chengedOrder.Status, Is.EqualTo(OrderStatus.Taken));
-            Assert.That(chengedOrder.AssignedTaxi, Is.Not.Null);
-            Assert.That(chengedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
+            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Taken));
+            Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
+            Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
         }
 
         [Test]
