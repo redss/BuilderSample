@@ -55,7 +55,7 @@ namespace BuilderSample.Tests
                 .BuildAndSave();
 
             var order = new OrderBuilder(Fixture.Context)
-                .WithStatus(OrderStatus.Open)
+                .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
             // act
@@ -68,7 +68,7 @@ namespace BuilderSample.Tests
 
             var changedOrder = Fixture.Context.Orders.Find(order.Id);
 
-            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Taken));
+            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
             Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
             Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
         }
@@ -83,17 +83,17 @@ namespace BuilderSample.Tests
 
             var alreadyTakenOrder = new OrderBuilder(Fixture.Context)
                 .WithAssignedTaxi(taxi)
-                .WithStatus(OrderStatus.Taken)
+                .WithStatus(OrderStatus.Ongoing)
                 .BuildAndSave();
 
             var order = new OrderBuilder(Fixture.Context)
-                .WithStatus(OrderStatus.Open)
+                .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
             // act, assert
 
             Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
-                Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
+                Throws.TypeOf<TaxiHasOngoingOrderException>());
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace BuilderSample.Tests
 
             var order = new OrderBuilder(Fixture.Context)
                 .WithSomeAssignedTaxi()
-                .WithStatus(OrderStatus.Taken)
+                .WithStatus(OrderStatus.Ongoing)
                 .BuildAndSave();
 
             // act, assert
@@ -125,7 +125,7 @@ namespace BuilderSample.Tests
 
             var order = new OrderBuilder(Fixture.Context)
                 .WithSomeAssignedTaxi()
-                .WithStatus(OrderStatus.Complete)
+                .WithStatus(OrderStatus.Completed)
                 .BuildAndSave();
 
             // act, assert

@@ -4,7 +4,7 @@ using BuilderSample.Model;
 
 namespace BuilderSample
 {
-    public class TaxiHasOngoingOrderAlreadyException : Exception
+    public class TaxiHasOngoingOrderException : Exception
     {
     }
 
@@ -28,28 +28,39 @@ namespace BuilderSample
             using (var context = new TaxiCompanyContext())
             using (var transaction = context.Database.BeginTransaction())
             {
-                if (context.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Taken))
+                if (context.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Ongoing))
                 {
-                    throw new TaxiHasOngoingOrderAlreadyException();
+                    throw new TaxiHasOngoingOrderException();
                 }
 
-                var taxi = context.Taxis.Single(t => t.Id == taxiId);
-                var order = context.Orders.Single(t => t.Id == orderId);
+                var taxi = context.Taxis.SingleOrDefault(t => t.Id == taxiId);
 
-                if (order.Status == OrderStatus.Taken)
+                if (taxi == null)
+                {
+                    throw new InvalidOperationException("Taxi " + taxiId + " was not found.");
+                }
+
+                var order = context.Orders.SingleOrDefault(t => t.Id == orderId);
+
+                if (order == null)
+                {
+                    throw new InvalidOperationException("Order " + orderId + " was not found.");
+                }
+
+                if (order.Status == OrderStatus.Ongoing)
                 {
                     throw new OrderAlreadyTakenException();
                 }
-                if (order.Status == OrderStatus.Complete)
+
+                if (order.Status == OrderStatus.Completed)
                 {
                     throw new OrderAlreadyCompletedException();
                 }
 
-                order.Status = OrderStatus.Taken;
+                order.Status = OrderStatus.Ongoing;
                 order.AssignedTaxi = taxi;
 
                 context.SaveChanges();
-
                 transaction.Commit();
             }
         }

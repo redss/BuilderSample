@@ -5,9 +5,9 @@ namespace BuilderSample.Model
 {
     public enum OrderStatus
     {
-        Open,
-        Taken,
-        Complete
+        New,
+        Ongoing,
+        Completed
     }
 
     public class Order

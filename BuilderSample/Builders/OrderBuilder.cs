@@ -17,7 +17,7 @@ namespace BuilderSample.Builders
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Open
+                Status = OrderStatus.New
             };
         }
 

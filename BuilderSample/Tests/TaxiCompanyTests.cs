@@ -72,7 +72,7 @@ namespace BuilderSample.Tests
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Open
+                Status = OrderStatus.New
             };
 
             Fixture.Context.Orders.Add(order);
@@ -89,7 +89,7 @@ namespace BuilderSample.Tests
 
             var changedOrder = Fixture.Context.Orders.Find(order.Id);
 
-            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Taken));
+            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
             Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
             Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
         }
@@ -121,7 +121,7 @@ namespace BuilderSample.Tests
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Taken,
+                Status = OrderStatus.Ongoing,
                 AssignedTaxi = taxi
             };
 
@@ -131,7 +131,7 @@ namespace BuilderSample.Tests
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Open
+                Status = OrderStatus.New
             };
 
             Fixture.Context.SaveChanges();
@@ -139,7 +139,7 @@ namespace BuilderSample.Tests
             // act, assert
 
             Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
-                Throws.TypeOf<TaxiHasOngoingOrderAlreadyException>());
+                Throws.TypeOf<TaxiHasOngoingOrderException>());
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace BuilderSample.Tests
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Taken,
+                Status = OrderStatus.Ongoing,
                 
                 AssignedTaxi = new Taxi
                 {
@@ -225,7 +225,7 @@ namespace BuilderSample.Tests
             {
                 Address = "Gliwice Akademicka 100",
                 RequiredTime = new DateTime(2015, 5, 30, 14, 0, 0),
-                Status = OrderStatus.Complete,
+                Status = OrderStatus.Completed,
 
                 AssignedTaxi = new Taxi
                 {

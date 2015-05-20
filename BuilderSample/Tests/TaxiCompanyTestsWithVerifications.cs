@@ -30,7 +30,7 @@ namespace BuilderSample.Tests
             {
                 var changedOrder = Context.Orders.Find(orderId);
 
-                Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Taken));
+                Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
                 Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
                 Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxiId));
             }
@@ -64,7 +64,7 @@ namespace BuilderSample.Tests
                 .BuildAndSave();
 
             var order = new OrderBuilder(Fixture.Context)
-                .WithStatus(OrderStatus.Open)
+                .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
             // act
