@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BuilderSample.Model
 {
@@ -15,6 +16,7 @@ namespace BuilderSample.Model
 
         public virtual OrderStatus Status { get; set; }
 
+        [Required]
         public virtual string Address { get; set; }
 
         public virtual DateTime RequiredTime { get; set; }

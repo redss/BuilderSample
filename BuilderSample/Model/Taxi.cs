@@ -7,6 +7,7 @@ namespace BuilderSample.Model
     {
         public virtual int Id { get; set; }
 
+        [Required]
         public virtual string LicensePlate { get; set; }
 
         [Required]
