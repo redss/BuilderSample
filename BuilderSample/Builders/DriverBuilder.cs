@@ -9,7 +9,7 @@ namespace BuilderSample.Builders
         private readonly Driver _driver = new Driver
         {
             FirstName = "Jan",
-            Surname = "Kowalski",
+            LastName = "Kowalski",
             //Email = "driver@qa.com"
         };
 

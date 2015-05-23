@@ -57,7 +57,7 @@ namespace BuilderSample.Tests
                 Owner = new Driver
                 {
                     FirstName = "Jan",
-                    Surname = "Nowak"
+                    LastName = "Nowak"
                 },
 
                 Corporation = new Corporation
@@ -106,7 +106,7 @@ namespace BuilderSample.Tests
                 Owner = new Driver
                 {
                     FirstName = "Jan",
-                    Surname = "Kowalski"
+                    LastName = "Kowalski"
                 },
 
                 Corporation = new Corporation
@@ -154,7 +154,7 @@ namespace BuilderSample.Tests
                 Owner = new Driver
                 {
                     FirstName = "Jan",
-                    Surname = "Kowalski"
+                    LastName = "Kowalski"
                 },
 
                 Corporation = new Corporation
@@ -178,7 +178,7 @@ namespace BuilderSample.Tests
                     Owner = new Driver
                     {
                         FirstName = "Mateusz",
-                        Surname = "Nowak"
+                        LastName = "Nowak"
                     },
 
                     Corporation = new Corporation
@@ -210,7 +210,7 @@ namespace BuilderSample.Tests
                 Owner = new Driver
                 {
                     FirstName = "Jan",
-                    Surname = "Kowalski"
+                    LastName = "Kowalski"
                 },
 
                 Corporation = new Corporation
@@ -234,7 +234,7 @@ namespace BuilderSample.Tests
                     Owner = new Driver
                     {
                         FirstName = "Mateusz",
-                        Surname = "Nowak"
+                        LastName = "Nowak"
                     },
 
                     Corporation = new Corporation
