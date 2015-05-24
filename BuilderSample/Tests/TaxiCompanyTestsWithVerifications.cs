@@ -69,7 +69,7 @@ namespace BuilderSample.Tests
 
             // act
 
-            Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
+            Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
 
             Fixture.ResetContext();
 

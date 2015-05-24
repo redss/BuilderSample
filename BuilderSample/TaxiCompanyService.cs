@@ -18,12 +18,12 @@ namespace BuilderSample
 
     public interface ITaxiCompanyService
     {
-        void AssignTaxiToOrder(int taxiId, int orderId);
+        void SendTaxi(int taxiId, int orderId);
     }
 
     public class TaxiCompanyService : ITaxiCompanyService
     {
-        public void AssignTaxiToOrder(int taxiId, int orderId)
+        public void SendTaxi(int taxiId, int orderId)
         {
             using (var context = new TaxiCompanyContext())
             using (var transaction = context.Database.BeginTransaction())

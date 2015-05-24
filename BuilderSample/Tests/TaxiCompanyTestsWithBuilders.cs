@@ -60,7 +60,7 @@ namespace BuilderSample.Tests
 
             // act
 
-            Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id);
+            Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
 
             Fixture.ResetContext();
 
@@ -92,7 +92,7 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
                 Throws.TypeOf<TaxiHasOngoingOrderException>());
         }
 
@@ -111,7 +111,7 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyTakenException>());
         }
 
@@ -130,7 +130,7 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.AssignTaxiToOrder(taxi.Id, order.Id),
+            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
                 Throws.TypeOf<OrderAlreadyCompletedException>());
         }
     }
