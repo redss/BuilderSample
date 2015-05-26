@@ -56,7 +56,7 @@ namespace BuilderSample.Tests
         }
 
         [Test]
-        public void Can_Assign_Taxi_To_A_New_Order()
+        public void Can_Send_Taxi_To_A_New_Order()
         {
             // arrange
 
