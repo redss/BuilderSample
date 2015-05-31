@@ -29,27 +29,6 @@ namespace BuilderSample.Specs
 
         public int HandledOrderId;
 
-        [Given(@"There is a taxi ([^ ]*)")]
-        public void ThereIsATaxi(string licensePlate)
-        {
-            new TaxiBuilder(Fixture.Context)
-                .WithLicensePlate(licensePlate)
-                .BuildAndSave();
-        }
-
-        [Given(@"There is a taxi (.*) assigned to some ongoing order")]
-        public void ThereIsATaxiAssignedToSomeOngoingOrder(string licensePlate)
-        {
-            var taxi = new TaxiBuilder(Fixture.Context)
-                .WithLicensePlate(licensePlate)
-                .BuildAndSave();
-
-            new OrderBuilder(Fixture.Context)
-                .WithStatus(OrderStatus.Ongoing)
-                .WithAssignedTaxi(taxi)
-                .BuildAndSave();
-        }
-        
         [Given(@"There is a new order")]
         public void GivenThereIsANewOrder()
         {
@@ -79,6 +58,27 @@ namespace BuilderSample.Specs
                 .BuildAndSave();
 
             HandledOrderId = order.Id;
+        }
+
+        [Given(@"There is a taxi ([^ ]*)")]
+        public void ThereIsATaxi(string licensePlate)
+        {
+            new TaxiBuilder(Fixture.Context)
+                .WithLicensePlate(licensePlate)
+                .BuildAndSave();
+        }
+
+        [Given(@"There is a taxi (.*) assigned to some ongoing order")]
+        public void ThereIsATaxiAssignedToSomeOngoingOrder(string licensePlate)
+        {
+            var taxi = new TaxiBuilder(Fixture.Context)
+                .WithLicensePlate(licensePlate)
+                .BuildAndSave();
+
+            new OrderBuilder(Fixture.Context)
+                .WithStatus(OrderStatus.Ongoing)
+                .WithAssignedTaxi(taxi)
+                .BuildAndSave();
         }
         
         [When(@"I send taxi (.*) to an order")]

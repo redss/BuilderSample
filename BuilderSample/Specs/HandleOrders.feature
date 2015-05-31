@@ -1,5 +1,5 @@
 ﻿Feature: HandleOrders
-	In order to fulfill the client order
+	In order to fulfill the client order and get money from him
 	As a taxi operator
 	I want to be able to send a taxi to a client
 

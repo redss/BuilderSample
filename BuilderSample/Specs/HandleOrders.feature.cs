@@ -32,8 +32,8 @@ namespace BuilderSample.Specs
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "HandleOrders", "In order to fulfill the client order\nAs a taxi operator\nI want to be able to send" +
-                    " a taxi to a client", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "HandleOrders", "In order to fulfill the client order and get money from him\nAs a taxi operator\nI " +
+                    "want to be able to send a taxi to a client", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
