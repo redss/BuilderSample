@@ -61,7 +61,7 @@
     <Compile Include="Model\Corporation.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Taxi.cs" />
-    <Compile Include="Specs\DatabaseFixture.cs" />
+    <Compile Include="Setup\DatabaseFixture.cs" />
     <Compile Include="Specs\HandleOrders.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -72,9 +72,7 @@
     <Compile Include="Model\Driver.cs" />
     <Compile Include="TaxiCompanyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\TaxiCompanyTestsWithVerifications.cs" />
-    <Compile Include="Tests\TaxiCompanyTestsWithBuilders.cs" />
-    <Compile Include="Tests\TaxiCompanyTests.cs" />
+    <Compile Include="Tests\TaxiCompanyServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

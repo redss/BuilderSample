@@ -1,34 +1,25 @@
-﻿using System;
-using BuilderSample.Builders;
+﻿using BuilderSample.Builders;
 using BuilderSample.Model;
+using BuilderSample.Setup;
+using BuilderSample.Specs;
 using NUnit.Framework;
 
 namespace BuilderSample.Tests
 {
     [TestFixture]
-    public class TaxiCompanyTestsWithBuilders
+    public class TaxiCompanyServiceTests
     {
-        public class TaxiCompanyFixture : IDisposable
+        public class TaxiCompanyFixture : DatabaseFixture
         {
-            public TaxiCompanyContext Context = new TaxiCompanyContext();
             public TaxiCompanyService TaxiCompanyService = new TaxiCompanyService();
 
-            public TaxiCompanyFixture()
+            public void VerifyOrderWasTakenBy(int orderId, int taxiId)
             {
-                Context.Database.Delete();
-                Context.Database.Create();
-            }
+                var changedOrder = Context.Orders.Find(orderId);
 
-            public void ResetContext()
-            {
-                Context.Dispose();
-
-                Context = new TaxiCompanyContext();
-            }
-
-            public void Dispose()
-            {
-                Context.Dispose();
+                Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
+                Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
+                Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxiId));
             }
         }
 
@@ -66,11 +57,7 @@ namespace BuilderSample.Tests
 
             // assert
 
-            var changedOrder = Fixture.Context.Orders.Find(order.Id);
-
-            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
-            Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
-            Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
+            Fixture.VerifyOrderWasTakenBy(order.Id, taxi.Id);
         }
 
         [Test]

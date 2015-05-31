@@ -2,6 +2,7 @@
 using System.Linq;
 using BuilderSample.Builders;
 using BuilderSample.Model;
+using BuilderSample.Setup;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 

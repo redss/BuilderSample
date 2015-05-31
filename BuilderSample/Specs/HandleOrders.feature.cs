@@ -73,9 +73,9 @@ namespace BuilderSample.Specs
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.Given("There is a taxi SO12345", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("There is a new order", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 8
- testRunner.And("There is a new order", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("There is a taxi SO12345", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 9
  testRunner.When("I send taxi SO12345 to an order", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10

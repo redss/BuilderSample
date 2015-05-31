@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BuilderSample.Specs
+namespace BuilderSample.Setup
 {
     public class DatabaseFixture : IDisposable
     {
