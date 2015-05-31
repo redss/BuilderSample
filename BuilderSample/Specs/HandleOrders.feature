@@ -15,3 +15,15 @@ Scenario: Sending taxi when it's already handling an order
 	And There is a taxi SO12345 assigned to some ongoing order
 	When I send taxi SO12345 to an order
 	Then error message should be displayed
+
+Scenario: Sending taxi to already taken order
+	Given There is an already taken order
+	And There is a taxi SO12345
+	When I send taxi SO12345 to an order
+	Then error message should be displayed
+
+Scenario: Sending taxi to already completed order
+	Given There is already completed order
+	And There is a taxi SO12345
+	When I send taxi SO12345 to an order
+	Then error message should be displayed

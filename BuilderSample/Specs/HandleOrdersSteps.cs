@@ -58,6 +58,28 @@ namespace BuilderSample.Specs
 
             HandledOrderId = order.Id;
         }
+
+        [Given(@"There is an already taken order")]
+        public void GivenThereIsAnAlreadyTakenOrder()
+        {
+            var order = new OrderBuilder(Fixture.Context)
+                .WithStatus(OrderStatus.Ongoing)
+                .WithSomeAssignedTaxi()
+                .BuildAndSave();
+
+            HandledOrderId = order.Id;
+        }
+
+        [Given(@"There is already completed order")]
+        public void GivenThereIsAnAlreadyCompletedOrder()
+        {
+            var order = new OrderBuilder(Fixture.Context)
+                .WithStatus(OrderStatus.Completed)
+                .WithSomeAssignedTaxi()
+                .BuildAndSave();
+
+            HandledOrderId = order.Id;
+        }
         
         [When(@"I send taxi (.*) to an order")]
         public void WhenISendTaxiToAnOrder(string licensePlate)
@@ -93,7 +115,7 @@ namespace BuilderSample.Specs
         [Then(@"error message should be displayed")]
         public void ErrorMessageShouldBeDisplayed()
         {
-            Assert.That(OrderHandlingPage.ErrorMessageIsDisplayed());
+            Assert.That(OrderHandlingPage.ErrorMessageIsDisplayed(), "Error message was not displayed.");
         }
     }
 }
