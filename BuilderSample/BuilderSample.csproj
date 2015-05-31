@@ -61,6 +61,13 @@
     <Compile Include="Model\Corporation.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Taxi.cs" />
+    <Compile Include="Specs\DatabaseFixture.cs" />
+    <Compile Include="Specs\HandleOrders.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HandleOrders.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Specs\HandleOrdersSteps.cs" />
     <Compile Include="TaxiCompanyService.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="TaxiCompanyContext.cs" />
@@ -72,6 +79,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Specs\HandleOrders.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>HandleOrders.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

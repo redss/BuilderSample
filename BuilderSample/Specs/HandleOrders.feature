@@ -1,0 +1,11 @@
+﻿Feature: HandleOrders
+	In order to fulfill the client order
+	As a taxi operator
+	I want to be able to send a taxi to a client
+
+Scenario: Sending a taxi
+	Given There is a taxi SO12345
+	And There is a new order
+	When I send taxi SO12345 to an order
+	Then order should be assigned to taxi SO12345
+	And order should be in progress

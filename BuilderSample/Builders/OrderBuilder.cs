@@ -21,6 +21,13 @@ namespace BuilderSample.Builders
             };
         }
 
+        public OrderBuilder WithId(int orderId)
+        {
+            _order.Id = orderId;
+
+            return this;
+        }
+
         public OrderBuilder WithStatus(OrderStatus orderStatus)
         {
             _order.Status = orderStatus;

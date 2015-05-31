@@ -1,4 +1,5 @@
 ﻿using BuilderSample.Model;
+using TechTalk.SpecFlow.Bindings;
 
 namespace BuilderSample.Builders
 {
@@ -18,6 +19,13 @@ namespace BuilderSample.Builders
                 Owner = new DriverBuilder(_context).Build(),
                 Corporation = new CorporationBuilder(_context).Build()
             };
+        }
+
+        public TaxiBuilder WithLicensePlate(string licensePlate)
+        {
+            _taxi.LicensePlate = licensePlate;
+
+            return this;
         }
 
         public Taxi Build()
