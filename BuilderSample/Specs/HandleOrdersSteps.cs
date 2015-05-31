@@ -12,11 +12,13 @@ namespace BuilderSample.Specs
     public class HandleOrdersSteps
     {
         public DatabaseFixture Fixture;
+        public OrderHandlingPage OrderHandlingPage;
 
         [BeforeScenario]
         public void BeforeScenario()
         {
             Fixture = new DatabaseFixture();
+            OrderHandlingPage = new OrderHandlingPage(Fixture.Context, new TaxiCompanyService());
         }
 
         [AfterScenario]
@@ -27,11 +29,24 @@ namespace BuilderSample.Specs
 
         public int HandledOrderId;
 
-        [Given(@"There is a taxi (.*)")]
-        public void GivenThereIsATaxi(string licensePlate)
+        [Given(@"There is a taxi ([^ ]*)")]
+        public void ThereIsATaxi(string licensePlate)
         {
             new TaxiBuilder(Fixture.Context)
                 .WithLicensePlate(licensePlate)
+                .BuildAndSave();
+        }
+
+        [Given(@"There is a taxi (.*) assigned to some ongoing order")]
+        public void ThereIsATaxiAssignedToSomeOngoingOrder(string licensePlate)
+        {
+            var taxi = new TaxiBuilder(Fixture.Context)
+                .WithLicensePlate(licensePlate)
+                .BuildAndSave();
+
+            new OrderBuilder(Fixture.Context)
+                .WithStatus(OrderStatus.Ongoing)
+                .WithAssignedTaxi(taxi)
                 .BuildAndSave();
         }
         
@@ -47,12 +62,10 @@ namespace BuilderSample.Specs
         [When(@"I send taxi (.*) to an order")]
         public void WhenISendTaxiToAnOrder(string licensePlate)
         {
-            var taxi = Fixture.Context.Taxis
-                .Single(t => t.LicensePlate == licensePlate);
-
-            var sut = new TaxiCompanyService();
-
-            sut.SendTaxi(taxi.Id, HandledOrderId);
+            OrderHandlingPage
+                .SelectTaxi(licensePlate)
+                .SelectOrder(HandledOrderId.ToString())
+                .SendTaxi();
 
             Fixture.ResetContext();
         }
@@ -75,6 +88,12 @@ namespace BuilderSample.Specs
                 .Single(o => o.Id == HandledOrderId);
 
             Assert.That(order.Status, Is.EqualTo(OrderStatus.Ongoing));
+        }
+
+        [Then(@"error message should be displayed")]
+        public void ErrorMessageShouldBeDisplayed()
+        {
+            Assert.That(OrderHandlingPage.ErrorMessageIsDisplayed());
         }
     }
 }

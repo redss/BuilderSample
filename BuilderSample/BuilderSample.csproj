@@ -68,6 +68,7 @@
       <DependentUpon>HandleOrders.feature</DependentUpon>
     </Compile>
     <Compile Include="Specs\HandleOrdersSteps.cs" />
+    <Compile Include="Specs\OrderHandlingPage.cs" />
     <Compile Include="TaxiCompanyService.cs" />
     <Compile Include="Model\Driver.cs" />
     <Compile Include="TaxiCompanyContext.cs" />

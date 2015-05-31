@@ -9,3 +9,9 @@ Scenario: Sending a taxi
 	When I send taxi SO12345 to an order
 	Then order should be assigned to taxi SO12345
 	And order should be in progress
+
+Scenario: Sending taxi when it's already handling an order
+	Given There is a new order
+	And There is a taxi SO12345 assigned to some ongoing order
+	When I send taxi SO12345 to an order
+	Then error message should be displayed
