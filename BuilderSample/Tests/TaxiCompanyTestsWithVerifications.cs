@@ -1,6 +1,7 @@
 ﻿using System;
 using BuilderSample.Builders;
 using BuilderSample.Model;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace BuilderSample.Tests
@@ -30,9 +31,10 @@ namespace BuilderSample.Tests
             {
                 var changedOrder = Context.Orders.Find(orderId);
 
-                Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
-                Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
-                Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxiId));
+                changedOrder.Should().NotBeNull();
+                changedOrder.Status.Should().Be(OrderStatus.Ongoing);
+                changedOrder.AssignedTaxi.Should().NotBeNull();
+                changedOrder.AssignedTaxi.Id.Should().Be(taxiId);
             }
 
             public void Dispose()
@@ -44,19 +46,19 @@ namespace BuilderSample.Tests
         public TaxiCompanyFixture Fixture;
 
         [SetUp]
-        public void SetUp()
+        public void set_up()
         {
             Fixture = new TaxiCompanyFixture();
         }
 
         [TearDown]
-        public void TearDown()
+        public void tear_down()
         {
             Fixture.Dispose();
         }
 
         [Test]
-        public void Can_Send_Taxi_To_A_New_Order()
+        public void can_send_taxi_to_a_new_order()
         {
             // arrange
 

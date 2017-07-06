@@ -1,7 +1,9 @@
 ﻿using System;
 using BuilderSample.Builders;
 using BuilderSample.Model;
+using FluentAssertions;
 using NUnit.Framework;
+// ReSharper disable UnusedVariable
 
 namespace BuilderSample.Tests
 {
@@ -35,19 +37,19 @@ namespace BuilderSample.Tests
         public TaxiCompanyFixture Fixture;
 
         [SetUp]
-        public void SetUp()
+        public void set_up()
         {
             Fixture = new TaxiCompanyFixture();
         }
 
         [TearDown]
-        public void TearDown()
+        public void tear_down()
         {
             Fixture.Dispose();
         }
 
         [Test]
-        public void Can_Send_Taxi_To_A_New_Order()
+        public void can_send_taxi_to_a_new_order()
         {
             // arrange
 
@@ -68,13 +70,14 @@ namespace BuilderSample.Tests
 
             var changedOrder = Fixture.Context.Orders.Find(order.Id);
 
-            Assert.That(changedOrder.Status, Is.EqualTo(OrderStatus.Ongoing));
-            Assert.That(changedOrder.AssignedTaxi, Is.Not.Null);
-            Assert.That(changedOrder.AssignedTaxi.Id, Is.EqualTo(taxi.Id));
+            changedOrder.Should().NotBeNull();
+            changedOrder.Status.Should().Be(OrderStatus.Ongoing);
+            changedOrder.AssignedTaxi.Should().NotBeNull();
+            changedOrder.AssignedTaxi.Id.Should().Be(taxi.Id);
         }
 
         [Test]
-        public void Assign_Taxi_Fails_When_Taxi_Is_Already_Assigned_To_Another_Order()
+        public void assign_taxi_fails_when_taxi_is_already_assigned_to_another_order()
         {
             // arrange
 
@@ -92,12 +95,13 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
-                Throws.TypeOf<TaxiHasOngoingOrderException>());
+            Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            sendingTaxi.ShouldThrowExactly<TaxiHasOngoingOrderException>();
         }
 
         [Test]
-        public void Assign_Taxi_Fails_When_Order_Is_Already_Taken()
+        public void assign_taxi_fails_when_order_is_already_taken()
         {
             // arrange
 
@@ -111,12 +115,13 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
-                Throws.TypeOf<OrderAlreadyTakenException>());
+            Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            sendingTaxi.ShouldThrowExactly<OrderAlreadyTakenException>();
         }
 
         [Test]
-        public void Assign_Taxi_Fails_When_Order_Is_Completed()
+        public void assign_taxi_fails_when_order_is_completed()
         {
             // arrange
 
@@ -130,8 +135,9 @@ namespace BuilderSample.Tests
 
             // act, assert
 
-            Assert.That(() => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id),
-                Throws.TypeOf<OrderAlreadyCompletedException>());
+            Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            sendingTaxi.ShouldThrowExactly<OrderAlreadyCompletedException>();
         }
     }
 }
