@@ -4,6 +4,8 @@ using BuilderSample.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
+// ReSharper disable PossibleNullReferenceException
+
 namespace BuilderSample.Tests
 {
     [TestFixture]
@@ -60,7 +62,7 @@ namespace BuilderSample.Tests
         [Test]
         public void can_send_taxi_to_a_new_order()
         {
-            // arrange
+            // given
 
             var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
@@ -69,13 +71,13 @@ namespace BuilderSample.Tests
                 .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
-            // act
+            // when
 
             Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
 
             Fixture.ResetContext();
 
-            // assert
+            // then
 
             Fixture.VerifyOrderWasTakenBy(order.Id, taxi.Id);
         }

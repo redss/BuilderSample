@@ -4,29 +4,11 @@ using BuilderSample.Model;
 
 namespace BuilderSample
 {
-    public class TaxiHasOngoingOrderException : Exception
-    {
-    }
-
-    public class OrderAlreadyTakenException : Exception
-    {
-    }
-
-    public class OrderAlreadyCompletedException : Exception
-    {
-    }
-
-    public interface ITaxiCompanyService
-    {
-        void SendTaxi(int taxiId, int orderId);
-    }
-
-    public class TaxiCompanyService : ITaxiCompanyService
+    public class TaxiCompanyService
     {
         public void SendTaxi(int taxiId, int orderId)
         {
             using (var context = new TaxiCompanyContext())
-            using (var transaction = context.Database.BeginTransaction())
             {
                 if (context.Orders.Any(o => o.AssignedTaxi.Id == taxiId && o.Status == OrderStatus.Ongoing))
                 {
@@ -61,8 +43,19 @@ namespace BuilderSample
                 order.AssignedTaxi = taxi;
 
                 context.SaveChanges();
-                transaction.Commit();
             }
         }
+    }
+
+    public class TaxiHasOngoingOrderException : Exception
+    {
+    }
+
+    public class OrderAlreadyTakenException : Exception
+    {
+    }
+
+    public class OrderAlreadyCompletedException : Exception
+    {
     }
 }

@@ -3,6 +3,8 @@ using BuilderSample.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
+// ReSharper disable PossibleNullReferenceException
+
 namespace BuilderSample.Tests
 {
     [TestFixture]
@@ -49,7 +51,7 @@ namespace BuilderSample.Tests
         [Test]
         public void can_send_taxi_to_a_new_order()
         {
-            // arrange
+            // given
 
             var taxi = new Taxi
             {
@@ -99,7 +101,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_taxi_is_already_assigned_to_another_order()
         {
-            // arrange
+            // given
 
             var taxi = new Taxi
             {
@@ -138,9 +140,11 @@ namespace BuilderSample.Tests
 
             Fixture.Context.SaveChanges();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            // then
 
             sendingTaxi.ShouldThrowExactly<TaxiHasOngoingOrderException>();
         }
@@ -148,7 +152,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_order_is_already_taken()
         {
-            // arrange
+            // given
 
             var taxi = new Taxi
             {
@@ -195,9 +199,11 @@ namespace BuilderSample.Tests
 
             Fixture.Context.SaveChanges();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            // then
 
             sendingTaxi.ShouldThrowExactly<OrderAlreadyTakenException>();
         }
@@ -205,7 +211,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_order_is_completed()
         {
-            // arrange
+            // given
 
             var taxi = new Taxi
             {
@@ -252,9 +258,11 @@ namespace BuilderSample.Tests
 
             Fixture.Context.SaveChanges();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            // then
 
             sendingTaxi.ShouldThrowExactly<OrderAlreadyCompletedException>();
         }

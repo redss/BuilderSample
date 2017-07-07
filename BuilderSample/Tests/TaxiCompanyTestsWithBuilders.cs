@@ -3,6 +3,8 @@ using BuilderSample.Builders;
 using BuilderSample.Model;
 using FluentAssertions;
 using NUnit.Framework;
+
+// ReSharper disable PossibleNullReferenceException
 // ReSharper disable UnusedVariable
 
 namespace BuilderSample.Tests
@@ -51,7 +53,7 @@ namespace BuilderSample.Tests
         [Test]
         public void can_send_taxi_to_a_new_order()
         {
-            // arrange
+            // given
 
             var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
@@ -60,13 +62,13 @@ namespace BuilderSample.Tests
                 .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
-            // act
+            // when
 
             Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
 
             Fixture.ResetContext();
 
-            // assert
+            // then
 
             var changedOrder = Fixture.Context.Orders.Find(order.Id);
 
@@ -79,7 +81,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_taxi_is_already_assigned_to_another_order()
         {
-            // arrange
+            // given
 
             var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
@@ -93,7 +95,7 @@ namespace BuilderSample.Tests
                 .WithStatus(OrderStatus.New)
                 .BuildAndSave();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
 
@@ -103,7 +105,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_order_is_already_taken()
         {
-            // arrange
+            // given
 
             var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
@@ -113,9 +115,11 @@ namespace BuilderSample.Tests
                 .WithStatus(OrderStatus.Ongoing)
                 .BuildAndSave();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            // then
 
             sendingTaxi.ShouldThrowExactly<OrderAlreadyTakenException>();
         }
@@ -123,7 +127,7 @@ namespace BuilderSample.Tests
         [Test]
         public void assign_taxi_fails_when_order_is_completed()
         {
-            // arrange
+            // given
 
             var taxi = new TaxiBuilder(Fixture.Context)
                 .BuildAndSave();
@@ -133,9 +137,11 @@ namespace BuilderSample.Tests
                 .WithStatus(OrderStatus.Completed)
                 .BuildAndSave();
 
-            // act, assert
+            // when
 
             Action sendingTaxi = () => Fixture.TaxiCompanyService.SendTaxi(taxi.Id, order.Id);
+
+            // then
 
             sendingTaxi.ShouldThrowExactly<OrderAlreadyCompletedException>();
         }
